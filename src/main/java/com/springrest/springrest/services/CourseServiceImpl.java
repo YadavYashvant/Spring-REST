@@ -1,11 +1,14 @@
 package com.springrest.springrest.services;
 
 import com.springrest.springrest.entities.Course;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -40,6 +43,22 @@ public class CourseServiceImpl implements CourseService {
     public Course addCourse(Course course) {
         list.add(course);
         return course;
+    }
+
+    @Override
+    public Course updateCourse(Course course) {
+        list.forEach(e -> {
+            if(e.getId() == course.getId()) {
+                e.setTitle(course.getTitle());
+                e.setDescription(course.getDescription());
+            }
+        });
+        return course;
+    }
+
+    @Override
+    public void deleteCourse(long parseLong) {
+        list = this.list.stream().filter(e->e.getId()!=parseLong).collect(Collectors.toList());
     }
 
 
